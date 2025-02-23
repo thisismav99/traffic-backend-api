@@ -1,4 +1,5 @@
 using TrafficBackendAPI.ReportModule;
+using TrafficBackendAPI.UserModule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddSwaggerGen();
 
 #region Modules
 builder.Services.RegisterReportModule(builder.Configuration.GetConnectionString("ReportDb")!);
+builder.Services.RegisterUserModule(builder.Configuration.GetConnectionString("UserDb")!);
 #endregion
 
 var app = builder.Build();

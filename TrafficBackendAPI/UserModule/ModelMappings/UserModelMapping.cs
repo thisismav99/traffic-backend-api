@@ -13,7 +13,7 @@ namespace TrafficBackendAPI.UserModule.ModelMappings
             builder.Property(x => x.FirstName).IsRequired().HasMaxLength(30);
             builder.Property(x => x.MiddleName).HasMaxLength(30);
             builder.Property(x => x.LastName).IsRequired().HasMaxLength(30);
-            builder.Property(x => x.AddressId).IsRequired();
+            builder.Property(x => x.AddressId);
             builder.Property(x => x.IsAnonymous).IsRequired();
             builder.Property(x => x.CreatedBy).IsRequired();
             builder.Property(x => x.DateCreated).IsRequired();

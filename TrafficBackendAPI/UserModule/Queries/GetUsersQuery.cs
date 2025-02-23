@@ -1,0 +1,89 @@
+﻿using MediatR;
+using TrafficBackendAPI.UserModule.Services;
+
+namespace TrafficBackendAPI.UserModule.Queries
+{
+    #region Request
+    public class GetUsersQueryRequest : IRequest<List<GetUsersQueryResponse>>
+    {
+    }
+    #endregion
+
+    #region Response
+    public class GetUsersQueryResponse
+    {
+        public string? FirstName { get; set; } = null;
+
+        public string? MiddleName { get; set; } = null;
+
+        public string? LastName { get; set; } = null;
+
+        public Guid? AddressId { get; set; } = Guid.Empty;
+
+        public bool? IsAnonymous { get; set; } = null;
+
+        public Guid? CreatedBy { get; set; } = Guid.Empty;
+
+        public DateTime? DateCreated { get; set; } = null;
+
+        public bool? IsActive { get; set; } = null;
+
+        public string? Message { get; set; } = null;
+    }
+    #endregion
+
+    #region Handler
+    public class GetUsersQueryHandler : IRequestHandler<GetUsersQueryRequest, List<GetUsersQueryResponse>>
+    {
+        #region Variables
+        private readonly IUserService _userService;
+        #endregion
+
+        #region Constructor
+        internal GetUsersQueryHandler(IUserService userService)
+        {
+            _userService = userService;
+        }
+        #endregion
+
+        #region Method
+        public async Task<List<GetUsersQueryResponse>> Handle(GetUsersQueryRequest request, CancellationToken cancellationToken)
+        {
+            var getUsers = await _userService.GetUsers();
+
+            if(getUsers.Item1 is not null)
+            {
+                var custom = getUsers.Item1.Select(x => new GetUsersQueryResponse
+                {
+                    FirstName =  x.FirstName,
+                    MiddleName = x.MiddleName,
+                    LastName = x.LastName,
+                    AddressId = x.AddressId,
+                    IsAnonymous = x.IsAnonymous,
+                    CreatedBy = x.CreatedBy,
+                    DateCreated = x.DateCreated,
+                    IsActive = x.IsActive,
+                    Message = getUsers.Item2
+                }).ToList();
+
+                var result = new List<GetUsersQueryResponse>();
+                result.AddRange(custom);
+
+                return result;
+            }
+            else
+            {
+                var result = new List<GetUsersQueryResponse>();
+
+                result.Select(x => new GetUsersQueryResponse
+                {
+                    Message = getUsers.Item2
+                }).ToList();
+
+                return result;
+            }
+        }
+        #endregion
+    }
+    #endregion
+}

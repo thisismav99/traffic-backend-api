@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TrafficBackendAPI.UserModule.Repositories;
+using TrafficBackendAPI.UserModule.Services;
 
 namespace TrafficBackendAPI.UserModule
 {
@@ -21,7 +22,10 @@ namespace TrafficBackendAPI.UserModule
 
         public static void RegisterServices(IServiceCollection services)
         {
+            services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<UserModuleAssemblyMarker>());
+
             services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

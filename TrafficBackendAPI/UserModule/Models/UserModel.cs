@@ -8,10 +8,10 @@
 
         public required string LastName { get; set; }
 
-        public Guid AddressId { get; set; }
+        public Guid? AddressId { get; set; }
 
         public bool IsAnonymous { get; set; }
 
-        public virtual required AddressModel AddressModel { get; set; }
+        public virtual AddressModel? AddressModel { get; set; }
     }
 }

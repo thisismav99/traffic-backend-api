@@ -10,6 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
 
+#region MediatR
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Program>());
+#endregion
+
 #region Modules
 builder.Services.RegisterReportModule(builder.Configuration.GetConnectionString("ReportDb")!);
 builder.Services.RegisterUserModule(builder.Configuration.GetConnectionString("UserDb")!);

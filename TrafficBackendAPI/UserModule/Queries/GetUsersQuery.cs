@@ -12,6 +12,8 @@ namespace TrafficBackendAPI.UserModule.Queries
     #region Response
     public class GetUsersQueryResponse
     {
+        public Guid Id { get; set; }
+
         public string? FirstName { get; set; } = null;
 
         public string? MiddleName { get; set; } = null;
@@ -33,14 +35,14 @@ namespace TrafficBackendAPI.UserModule.Queries
     #endregion
 
     #region Handler
-    public class GetUsersQueryHandler : IRequestHandler<GetUsersQueryRequest, List<GetUsersQueryResponse>>
+    internal class GetUsersQueryHandler : IRequestHandler<GetUsersQueryRequest, List<GetUsersQueryResponse>>
     {
         #region Variables
         private readonly IUserService _userService;
         #endregion
 
         #region Constructor
-        internal GetUsersQueryHandler(IUserService userService)
+        public GetUsersQueryHandler(IUserService userService)
         {
             _userService = userService;
         }
@@ -55,6 +57,7 @@ namespace TrafficBackendAPI.UserModule.Queries
             {
                 var custom = getUsers.Item1.Select(x => new GetUsersQueryResponse
                 {
+                    Id = x.Id,
                     FirstName =  x.FirstName,
                     MiddleName = x.MiddleName,
                     LastName = x.LastName,

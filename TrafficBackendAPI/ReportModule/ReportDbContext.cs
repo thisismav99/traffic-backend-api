@@ -3,10 +3,10 @@ using TrafficBackendAPI.ReportModule.ModelMappings;
 
 namespace TrafficBackendAPI.ReportModule
 {
-    internal class ReportDbContext : DbContext
+    public class ReportDbContext : DbContext
     {
         #region Constructor
-        public ReportDbContext()
+        public ReportDbContext(DbContextOptions<ReportDbContext> options) : base(options)
         {
             
         }

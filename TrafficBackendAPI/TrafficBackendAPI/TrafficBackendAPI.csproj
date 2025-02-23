@@ -15,12 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\ReportModule\TrafficBackendAPI.ReportModule.csproj" />
+    <ProjectReference Include="..\UserModule\TrafficBackendAPI.UserModule.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReportModule\TrafficBackendAPI.ReportModule.csproj" />
-    <ProjectReference Include="..\UserModule\TrafficBackendAPI.UserModule.csproj" />
+    <Folder Include="Controllers\Reports\" />
   </ItemGroup>
 
 </Project>

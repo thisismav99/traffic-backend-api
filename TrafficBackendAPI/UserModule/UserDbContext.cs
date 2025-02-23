@@ -3,10 +3,10 @@ using TrafficBackendAPI.UserModule.ModelMappings;
 
 namespace TrafficBackendAPI.UserModule
 {
-    internal class UserDbContext : DbContext
+    public class UserDbContext : DbContext
     {
         #region Constructor
-        public UserDbContext()
+        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
         {
             
         }

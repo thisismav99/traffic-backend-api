@@ -28,6 +28,8 @@ namespace TrafficBackendAPI.UserModule.Commands
     #region Response
     public class AddUserCommandResponse
     {
+        public Guid Id { get; set; }
+
         public string? FirstName { get; set; } = null;
 
         public string? MiddleName { get; set; } = null;
@@ -49,14 +51,14 @@ namespace TrafficBackendAPI.UserModule.Commands
     #endregion
 
     #region Handler
-    public class AddUserCommandHandler : IRequestHandler<AddUserCommandRequest, AddUserCommandResponse>
+    internal class AddUserCommandHandler : IRequestHandler<AddUserCommandRequest, AddUserCommandResponse>
     {
         #region Variables
         private readonly IUserService _userService;
         #endregion
 
         #region Constructor
-        internal AddUserCommandHandler(IUserService userService)
+        public AddUserCommandHandler(IUserService userService)
         {
             _userService = userService;
         }
@@ -81,6 +83,7 @@ namespace TrafficBackendAPI.UserModule.Commands
             {
                 var result = new AddUserCommandResponse
                 {
+                    Id = addResult.Item1.Id,
                     FirstName = addResult.Item1.FirstName,
                     MiddleName = addResult.Item1.MiddleName,
                     LastName = addResult.Item1.LastName,

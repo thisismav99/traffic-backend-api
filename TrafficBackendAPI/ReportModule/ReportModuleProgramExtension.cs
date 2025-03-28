@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TrafficBackendAPI.ReportModule.Repositories;
+using TrafficBackendAPI.ReportModule.Services;
 
 namespace TrafficBackendAPI.ReportModule
 {
@@ -22,6 +23,7 @@ namespace TrafficBackendAPI.ReportModule
         public static void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IReportService, ReportService>();
         }
     }
 }

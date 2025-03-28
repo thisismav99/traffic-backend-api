@@ -17,17 +17,17 @@ namespace TrafficBackendAPI.ReportModule.Repositories
         #endregion
 
         #region Methods
-        public async Task<Guid> AddReport(ReportModel reportModel)
+        public async Task<ReportModel?> Add(ReportModel reportModel)
         {
             await _reportDbContext.Set<ReportModel>().AddAsync(reportModel);
             await _reportDbContext.SaveChangesAsync();
 
-            return reportModel.Id;
+            return reportModel;
         }
 
-        public async Task DeleteReport(Guid reportId)
+        public async Task Delete(Guid reportId)
         {
-            var report = await GetReportById(reportId);
+            var report = await GetById(reportId);
             
             if(report is not null)
             {
@@ -36,17 +36,17 @@ namespace TrafficBackendAPI.ReportModule.Repositories
             }
         }
 
-        public async Task<List<ReportModel>?> GetAllReports()
+        public async Task<List<ReportModel>?> GetAll()
         {
             return await _reportDbContext.Set<ReportModel>().ToListAsync();
         }
 
-        public async Task<ReportModel?> GetReportById(Guid reportId)
+        public async Task<ReportModel?> GetById(Guid reportId)
         {
            return await _reportDbContext.Set<ReportModel>().FindAsync(reportId);
         }
 
-        public async Task UpdateReport(ReportModel reportModel)
+        public async Task Update(ReportModel reportModel)
         {
             _reportDbContext.Set<ReportModel>().Entry(reportModel).State = EntityState.Modified;
             await _reportDbContext.SaveChangesAsync();

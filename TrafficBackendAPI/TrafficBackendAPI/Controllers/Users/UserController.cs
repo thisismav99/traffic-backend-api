@@ -88,6 +88,52 @@ namespace TrafficBackendAPI.Controllers.Users
                 return NotFound();
             }
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            var command = new DeleteUserCommandRequest()
+            {
+                Id = id
+            };
+
+            var result = await _mediator.Send(command);
+
+            if(result is null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel userRequestModel)
+        {
+            var command = new UpdateUserCommandRequest()
+            {
+                FirstName = userRequestModel.FirstName,
+                MiddleName = userRequestModel.MiddleName,
+                LastName = userRequestModel.LastName,
+                IsAnonymous = userRequestModel.IsAnonymous,
+                CreatedBy = userRequestModel.CreatedBy,
+                DateCreated = userRequestModel.DateCreated,
+                IsActive = userRequestModel.IsActive,
+            };
+
+            var result = await _mediator.Send(command);
+
+            if(result is null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
         #endregion
     }
 }

@@ -39,6 +39,20 @@ namespace TrafficBackendAPI.UserModule.Services
             }
         }
 
+        public async Task<string?> DeleteUser(Guid id)
+        {
+            try
+            {
+                await _genericRepository.Delete(id);
+
+                return string.Empty;
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<(UserModel?, string?)> GetUserById(Guid id)
         {
             try
@@ -78,6 +92,20 @@ namespace TrafficBackendAPI.UserModule.Services
             catch(Exception ex)
             {
                 return (null, ex.Message);
+            }
+        }
+
+        public async Task<string?> UpdateUser(UserModel user)
+        {
+            try
+            {
+                await _genericRepository.Update(user);
+
+                return string.Empty;
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
             }
         }
         #endregion

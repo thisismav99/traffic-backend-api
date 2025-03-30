@@ -8,7 +8,7 @@ namespace TrafficBackendAPI.UserModule.Repositories
     {
         Task<T> Add(T entity);
         Task<T?> GetById(Guid id);
-        Task<List<T>?> GetAll();
+        Task<List<T>?> GetAll(List<Guid>? templateListId, bool asNoTracking);
         Task Update(T entity);
         Task Delete(Guid id);
     }

@@ -37,9 +37,33 @@ namespace TrafficBackendAPI.UserModule.Repositories
             }
         }
 
-        public async Task<List<T>?> GetAll()
+        public async Task<List<T>?> GetAll(List<Guid>? templateListId, bool asNoTracking)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            var result = new List<T>();
+
+            if(templateListId is null && !asNoTracking)
+            {
+                result = await _dbContext.Set<T>().ToListAsync();
+            }
+            else if(templateListId is null && asNoTracking)
+            {
+                result = await _dbContext.Set<T>().AsNoTracking().ToListAsync();
+            }
+            else if (templateListId is not null && !asNoTracking)
+            {
+                result = await _dbContext.Set<T>()
+                    .Where(x => templateListId.Contains(EF.Property<Guid>(x, "Id")))
+                    .ToListAsync();
+            }
+            else if(templateListId is not null && asNoTracking)
+            {
+                result = await _dbContext.Set<T>()
+                    .Where(x => templateListId.Contains(EF.Property<Guid>(x, "Id")))
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
+            return result;
         }
 
         public async Task<T?> GetById(Guid id)

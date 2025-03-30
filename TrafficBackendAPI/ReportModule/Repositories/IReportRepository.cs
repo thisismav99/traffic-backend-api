@@ -6,7 +6,7 @@ namespace TrafficBackendAPI.ReportModule.Repositories
     {
         Task<ReportModel?> Add(ReportModel reportModel);
         Task<ReportModel?> GetById(Guid reportId);
-        Task<List<ReportModel>?> GetAll();
+        Task<List<ReportModel>?> GetAll(List<Guid> reportListId, bool asNoTracking);
         Task Update(ReportModel reportModel);
         Task Delete(Guid reportId);
     }

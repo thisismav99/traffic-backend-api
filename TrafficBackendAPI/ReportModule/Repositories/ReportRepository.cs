@@ -36,9 +36,33 @@ namespace TrafficBackendAPI.ReportModule.Repositories
             }
         }
 
-        public async Task<List<ReportModel>?> GetAll()
+        public async Task<List<ReportModel>?> GetAll(List<Guid> reportListId, bool asNoTracking)
         {
-            return await _reportDbContext.Set<ReportModel>().ToListAsync();
+            var result = new List<ReportModel>();
+
+            if(reportListId is null && !asNoTracking)
+            {
+                result = await _reportDbContext.Set<ReportModel>().ToListAsync();
+            }
+            else if(reportListId is null && asNoTracking)
+            {
+                result = await _reportDbContext.Set<ReportModel>().AsNoTracking().ToListAsync();
+            }
+            else if(reportListId is not null && !asNoTracking)
+            {
+                result = await _reportDbContext.Set<ReportModel>()
+                    .Where(x => reportListId.Contains(x.Id))
+                    .ToListAsync();
+            }
+            else if(reportListId is not null && asNoTracking)
+            {
+                result = await _reportDbContext.Set<ReportModel>()
+                    .Where(x => reportListId.Contains(x.Id))
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
+            return result;
         }
 
         public async Task<ReportModel?> GetById(Guid reportId)

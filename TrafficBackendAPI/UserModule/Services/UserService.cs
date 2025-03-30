@@ -60,11 +60,11 @@ namespace TrafficBackendAPI.UserModule.Services
             }
         }
 
-        public async Task<(List<UserModel>?, string?)> GetUsers()
+        public async Task<(List<UserModel>?, string?)> GetUsers(List<Guid>? usersId, bool asNoTracking)
         {
             try
             {
-                var data = await _genericRepository.GetAll();
+                var data = await _genericRepository.GetAll(usersId, asNoTracking);
 
                 if(data is not null)
                 {

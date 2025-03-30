@@ -6,6 +6,6 @@ namespace TrafficBackendAPI.ReportModule.Services
     {
         Task<(ReportModel?, string)> AddReport(ReportModel report);
         Task<(ReportModel?, string)> GetReportById(Guid id);
-        Task<(List<ReportModel>?, string)> GetReports();
+        Task<(List<ReportModel>?, string)> GetReports(List<Guid>? reportsId, bool asNoTracking);
     }
 }

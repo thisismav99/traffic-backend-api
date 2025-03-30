@@ -7,6 +7,6 @@ namespace TrafficBackendAPI.UserModule.Services
     {
         Task<(UserModel?, string?)> AddUser(UserModel user);
         Task<(UserModel?, string?)> GetUserById(Guid id);
-        Task<(List<UserModel>?, string?)> GetUsers();
+        Task<(List<UserModel>?, string?)> GetUsers(List<Guid>? usersId, bool asNoTracking);
     }
 }

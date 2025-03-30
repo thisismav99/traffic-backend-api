@@ -6,6 +6,9 @@ namespace TrafficBackendAPI.UserModule.Queries
     #region Request
     public class GetUsersQueryRequest : IRequest<List<GetUsersQueryResponse>>
     {
+        public List<Guid>? Id { get; set; }
+
+        public bool AsNoTracking { get; set; }
     }
     #endregion
 
@@ -51,7 +54,7 @@ namespace TrafficBackendAPI.UserModule.Queries
         #region Method
         public async Task<List<GetUsersQueryResponse>> Handle(GetUsersQueryRequest request, CancellationToken cancellationToken)
         {
-            var getUsers = await _userService.GetUsers();
+            var getUsers = await _userService.GetUsers(request.Id, request.AsNoTracking);
 
             if(getUsers.Item1 is not null)
             {

@@ -60,11 +60,11 @@ namespace TrafficBackendAPI.ReportModule.Services
             }
         }
 
-        public async Task<(List<ReportModel>?, string)> GetReports()
+        public async Task<(List<ReportModel>?, string)> GetReports(List<Guid>? reportsId, bool asNoTracking)
         {
             try
             {
-                var data = await _reportRepository.GetAll();
+                var data = await _reportRepository.GetAll(reportsId, asNoTracking);
 
                 if (data is not null)
                 {

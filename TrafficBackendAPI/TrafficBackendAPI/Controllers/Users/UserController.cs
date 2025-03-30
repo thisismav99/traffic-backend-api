@@ -21,7 +21,7 @@ namespace TrafficBackendAPI.Controllers.Users
         #endregion
 
         #region Methods
-        [HttpPost("[controller]")]
+        [HttpPost]
         public async Task<IActionResult> AddUser([FromBody]UserRequestModel userRequestModel)
         {
             var command = new AddUserCommandRequest
@@ -68,10 +68,15 @@ namespace TrafficBackendAPI.Controllers.Users
             }
         }
 
-        [HttpGet("[controller]")]
-        public async Task<IActionResult> GetUsers()
+        [HttpGet]
+        [Route("/api/Users")]
+        public async Task<IActionResult> GetUsers([FromQuery]List<Guid>? usersId, [FromQuery]bool asNoTracking)
         {
-            var command = new GetUsersQueryRequest();
+            var command = new GetUsersQueryRequest 
+            { 
+                Id = usersId!.Count > 0 ? usersId : null,
+                AsNoTracking = asNoTracking,
+            };
 
             var result = await _mediator.Send(command);
 

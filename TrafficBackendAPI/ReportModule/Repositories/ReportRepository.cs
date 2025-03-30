@@ -36,7 +36,7 @@ namespace TrafficBackendAPI.ReportModule.Repositories
             }
         }
 
-        public async Task<List<ReportModel>?> GetAll(List<Guid> reportListId, bool asNoTracking)
+        public async Task<List<ReportModel>?> GetAll(List<Guid>? reportListId, bool asNoTracking)
         {
             var result = new List<ReportModel>();
 

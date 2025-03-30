@@ -13,8 +13,6 @@ namespace TrafficBackendAPI.UserModule.Commands
 
         public required string LastName { get; set; }
 
-        public Guid? AddressId { get; set; }
-
         public bool IsAnonymous { get; set; }
 
         public required Guid CreatedBy { get; set; }
@@ -35,8 +33,6 @@ namespace TrafficBackendAPI.UserModule.Commands
         public string? MiddleName { get; set; } = null;
 
         public string? LastName { get; set; } = null;
-
-        public Guid? AddressId { get; set; } = Guid.Empty;
 
         public bool? IsAnonymous { get; set; } = null;
 
@@ -72,7 +68,6 @@ namespace TrafficBackendAPI.UserModule.Commands
                 FirstName = request.FirstName,
                 MiddleName = request.MiddleName,
                 LastName = request.LastName,
-                AddressId = request.AddressId,
                 IsAnonymous = request.IsAnonymous,
                 CreatedBy = request.CreatedBy,
                 DateCreated = request.DateCreated,
@@ -87,7 +82,6 @@ namespace TrafficBackendAPI.UserModule.Commands
                     FirstName = addResult.Item1.FirstName,
                     MiddleName = addResult.Item1.MiddleName,
                     LastName = addResult.Item1.LastName,
-                    AddressId = addResult.Item1.AddressId,
                     IsAnonymous = addResult.Item1.IsAnonymous,
                     CreatedBy = addResult.Item1.CreatedBy,
                     DateCreated = addResult.Item1.DateCreated,

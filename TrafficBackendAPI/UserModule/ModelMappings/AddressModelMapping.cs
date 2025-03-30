@@ -17,9 +17,17 @@ namespace TrafficBackendAPI.UserModule.ModelMappings
             builder.Property(x => x.Region).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Country).IsRequired().HasMaxLength(50);
             builder.Property(x => x.PostalCode).IsRequired();
+            builder.Property(x => x.UserId).IsRequired();
             builder.Property(x => x.CreatedBy).IsRequired();
             builder.Property(x => x.DateCreated).IsRequired();
             builder.Property(x => x.IsActive).IsRequired();
+
+            builder.HasOne(x => x.User)
+                   .WithMany()
+                   .HasForeignKey(f => f.UserId)
+                   .OnDelete(DeleteBehavior.ClientCascade);
+
+            builder.ToTable("AddressTable");
         }
     }
 }

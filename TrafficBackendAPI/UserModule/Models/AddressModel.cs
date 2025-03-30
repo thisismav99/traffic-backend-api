@@ -15,5 +15,9 @@
         public required string Country { get; set; }
 
         public int PostalCode { get; set; }
+
+        public Guid UserId { get; set; }
+
+        public required UserModel User { get; set; }
     }
 }

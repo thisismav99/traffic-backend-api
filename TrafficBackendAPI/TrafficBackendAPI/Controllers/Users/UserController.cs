@@ -29,7 +29,6 @@ namespace TrafficBackendAPI.Controllers.Users
                 FirstName = userRequestModel.FirstName,
                 MiddleName = userRequestModel.MiddleName,
                 LastName = userRequestModel.LastName,
-                AddressId = userRequestModel.AddressId,
                 IsAnonymous = userRequestModel.IsAnonymous,
                 CreatedBy = userRequestModel.CreatedBy,
                 DateCreated = userRequestModel.DateCreated,

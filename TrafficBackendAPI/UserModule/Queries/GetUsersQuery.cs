@@ -23,8 +23,6 @@ namespace TrafficBackendAPI.UserModule.Queries
 
         public string? LastName { get; set; } = null;
 
-        public Guid? AddressId { get; set; } = Guid.Empty;
-
         public bool? IsAnonymous { get; set; } = null;
 
         public Guid? CreatedBy { get; set; } = Guid.Empty;
@@ -64,7 +62,6 @@ namespace TrafficBackendAPI.UserModule.Queries
                     FirstName =  x.FirstName,
                     MiddleName = x.MiddleName,
                     LastName = x.LastName,
-                    AddressId = x.AddressId,
                     IsAnonymous = x.IsAnonymous,
                     CreatedBy = x.CreatedBy,
                     DateCreated = x.DateCreated,

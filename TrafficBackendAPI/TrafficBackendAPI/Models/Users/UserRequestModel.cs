@@ -8,8 +8,6 @@
 
         public required string LastName { get; set; }
 
-        public Guid? AddressId { get; set; }
-
         public bool IsAnonymous { get; set; }
 
         public required Guid CreatedBy { get; set; }

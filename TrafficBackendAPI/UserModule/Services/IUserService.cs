@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TrafficBackendAPI.UserModule.Models;
+﻿using TrafficBackendAPI.DatabaseModule.Models.UserModule;
 
 namespace TrafficBackendAPI.UserModule.Services
 {
     internal interface IUserService
     {
-        Task<(UserModel?, string?)> AddUser(UserModel user);
-        Task<(UserModel?, string?)> GetUserById(Guid id);
-        Task<(List<UserModel>?, string?)> GetUsers(List<Guid>? usersId, bool asNoTracking);
+        Task<Guid> AddUser(UserModel user);
+        Task<UserModel?> GetUserById(Guid id);
+        Task<List<UserModel>?> GetUsersById(List<Guid> usersId, bool asNoTracking);
+        Task<List<UserModel>?> GetUsers(bool asNoTracking);
         Task<string?> UpdateUser(UserModel user);
         Task<string?> DeleteUser(Guid id);
     }

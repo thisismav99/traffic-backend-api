@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TrafficBackendAPI.UserModule.Models;
+using TrafficBackendAPI.DatabaseModule.Models.UserModule;
 using TrafficBackendAPI.UserModule.Services;
 
 namespace TrafficBackendAPI.UserModule.Commands
@@ -16,10 +16,6 @@ namespace TrafficBackendAPI.UserModule.Commands
         public bool IsAnonymous { get; set; }
 
         public required Guid CreatedBy { get; set; }
-
-        public DateTime DateCreated { get; set; }
-
-        public bool IsActive { get; set; }
     }
     #endregion
 
@@ -27,22 +23,6 @@ namespace TrafficBackendAPI.UserModule.Commands
     public class AddUserCommandResponse
     {
         public Guid Id { get; set; }
-
-        public string? FirstName { get; set; } = null;
-
-        public string? MiddleName { get; set; } = null;
-
-        public string? LastName { get; set; } = null;
-
-        public bool? IsAnonymous { get; set; } = null;
-
-        public Guid? CreatedBy { get; set; } = Guid.Empty;
-
-        public DateTime? DateCreated { get; set; } = null;
-
-        public bool? IsActive { get; set; } = null;
-
-        public string? Message { get; set; } = null;
     }
     #endregion
 
@@ -63,43 +43,21 @@ namespace TrafficBackendAPI.UserModule.Commands
         #region Method
         public async Task<AddUserCommandResponse> Handle(AddUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var addResult = await _userService.AddUser(new UserModel
+            var addUser = await _userService.AddUser(new UserModel
             {
                 FirstName = request.FirstName,
                 MiddleName = request.MiddleName,
                 LastName = request.LastName,
                 IsAnonymous = request.IsAnonymous,
-                CreatedBy = request.CreatedBy,
-                DateCreated = request.DateCreated,
-                IsActive = request.IsActive
+                CreatedBy = request.CreatedBy
             });
 
-            if(addResult.Item1 is not null)
+            var result = new AddUserCommandResponse()
             {
-                var result = new AddUserCommandResponse
-                {
-                    Id = addResult.Item1.Id,
-                    FirstName = addResult.Item1.FirstName,
-                    MiddleName = addResult.Item1.MiddleName,
-                    LastName = addResult.Item1.LastName,
-                    IsAnonymous = addResult.Item1.IsAnonymous,
-                    CreatedBy = addResult.Item1.CreatedBy,
-                    DateCreated = addResult.Item1.DateCreated,
-                    IsActive = addResult.Item1.IsActive,
-                    Message = addResult.Item2
-                };
+                Id = addUser
+            };
 
-                return result;
-            }
-            else
-            {
-                var result = new AddUserCommandResponse
-                {
-                    Message = addResult.Item2
-                };
-
-                return result;
-            }
+            return result;
         }
         #endregion
     }

@@ -1,6 +1,6 @@
-﻿using TrafficBackendAPI.UserModule.Models;
-using TrafficBackendAPI.UserModule.Repositories;
-using TrafficBackendAPI.UserModule.Utilities;
+﻿using TrafficBackendAPI.DatabaseModule;
+using TrafficBackendAPI.DatabaseModule.Models.UserModule;
+using TrafficBackendAPI.DatabaseModule.Repositories;
 
 namespace TrafficBackendAPI.UserModule.Services
 {
@@ -18,24 +18,20 @@ namespace TrafficBackendAPI.UserModule.Services
         #endregion
 
         #region Methods
-        public async Task<(UserModel?, string?)> AddUser(UserModel user)
+        public async Task<Guid> AddUser(UserModel user)
         {
             try
             {
+                user.DateCreated = DateTime.UtcNow;
+                user.IsActive = true;
+
                 var data = await _genericRepository.Add(user);
 
-                if(data is not null)
-                {
-                    return (data, ResponseMessageHelper.ServiceCommandMessage(1));
-                }
-                else
-                {
-                    return (null, ResponseMessageHelper.ServiceCommandMessage(2));
-                }
+                return data.Id;
             }
-            catch(Exception ex)
+            catch
             {
-                return (null, ex.Message);
+                throw;
             }
         }
 
@@ -43,9 +39,18 @@ namespace TrafficBackendAPI.UserModule.Services
         {
             try
             {
-                await _genericRepository.Delete(id);
+                var entity = await _genericRepository.GetById(id);
 
-                return string.Empty;
+                if(entity is not null)
+                {
+                    await _genericRepository.Delete(entity);
+
+                    return string.Empty;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"ID: {id} was not found.");
+                }
             }
             catch(Exception ex)
             {
@@ -53,7 +58,7 @@ namespace TrafficBackendAPI.UserModule.Services
             }
         }
 
-        public async Task<(UserModel?, string?)> GetUserById(Guid id)
+        public async Task<UserModel?> GetUserById(Guid id)
         {
             try
             {
@@ -61,37 +66,58 @@ namespace TrafficBackendAPI.UserModule.Services
 
                 if( data is not null)
                 {
-                    return (data, ResponseMessageHelper.ServiceQueryMessage(1));
+                    return data;
                 }
                 else
                 {
-                    return (null, ResponseMessageHelper.ServiceQueryMessage(2));
+                    throw new ArgumentException("No data found.");
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return (null, ex.Message);
+                throw;
             }
         }
 
-        public async Task<(List<UserModel>?, string?)> GetUsers(List<Guid>? usersId, bool asNoTracking)
+        public async Task<List<UserModel>?> GetUsers(bool asNoTracking)
         {
             try
             {
-                var data = await _genericRepository.GetAll(usersId, asNoTracking);
+                var data = await _genericRepository.GetAll(asNoTracking);
 
                 if(data is not null)
                 {
-                    return (data, ResponseMessageHelper.ServiceQueryMessage(1));
+                    return data;
                 }
                 else
                 {
-                    return (null, ResponseMessageHelper.ServiceQueryMessage(2));
+                    throw new ArgumentException("No data found.");
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                return (null, ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<UserModel>?> GetUsersById(List<Guid> usersId, bool asNoTracking)
+        {
+            try
+            {
+                var data = await _genericRepository.GetAllById(usersId, asNoTracking);
+
+                if(data is not null)
+                {
+                    return data;
+                }
+                else 
+                {
+                    throw new ArgumentException("No data found.");
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -99,9 +125,18 @@ namespace TrafficBackendAPI.UserModule.Services
         {
             try
             {
-                await _genericRepository.Update(user);
+                var existing = await _genericRepository.GetById(user.Id);
 
-                return string.Empty;
+                if (existing is not null)
+                {
+                    await _genericRepository.Update(user);
+
+                    return string.Empty;
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"ID: {user.Id} was not found.");
+                }
             }
             catch(Exception ex)
             {

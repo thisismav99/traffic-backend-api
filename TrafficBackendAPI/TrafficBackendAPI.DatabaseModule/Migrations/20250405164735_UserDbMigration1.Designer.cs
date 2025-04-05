@@ -3,26 +3,32 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TrafficBackendAPI.UserModule;
+using TrafficBackendAPI.DatabaseModule;
 
 #nullable disable
 
-namespace TrafficBackendAPI.UserModule.Migrations
+namespace TrafficBackendAPI.DatabaseModule.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250405164735_UserDbMigration1")]
+    partial class UserDbMigration1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TrafficBackendAPI.UserModule.Models.AddressModel", b =>
+            modelBuilder.Entity("TrafficBackendAPI.DatabaseModule.Models.UserModule.AddressModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,6 +55,9 @@ namespace TrafficBackendAPI.UserModule.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -69,6 +78,9 @@ namespace TrafficBackendAPI.UserModule.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -79,7 +91,7 @@ namespace TrafficBackendAPI.UserModule.Migrations
                     b.ToTable("AddressTable", (string)null);
                 });
 
-            modelBuilder.Entity("TrafficBackendAPI.UserModule.Models.UserModel", b =>
+            modelBuilder.Entity("TrafficBackendAPI.DatabaseModule.Models.UserModule.ContactModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,6 +101,54 @@ namespace TrafficBackendAPI.UserModule.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MobileNo")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("TelNo")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ContactTable", (string)null);
+                });
+
+            modelBuilder.Entity("TrafficBackendAPI.DatabaseModule.Models.UserModule.UserModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
@@ -111,14 +171,28 @@ namespace TrafficBackendAPI.UserModule.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("UserTable", (string)null);
                 });
 
-            modelBuilder.Entity("TrafficBackendAPI.UserModule.Models.AddressModel", b =>
+            modelBuilder.Entity("TrafficBackendAPI.DatabaseModule.Models.UserModule.AddressModel", b =>
                 {
-                    b.HasOne("TrafficBackendAPI.UserModule.Models.UserModel", "User")
+                    b.HasOne("TrafficBackendAPI.DatabaseModule.Models.UserModule.UserModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TrafficBackendAPI.DatabaseModule.Models.UserModule.ContactModel", b =>
+                {
+                    b.HasOne("TrafficBackendAPI.DatabaseModule.Models.UserModule.UserModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.ClientCascade)

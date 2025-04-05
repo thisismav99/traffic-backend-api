@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TrafficBackendAPI.UserModule.Models;
+using TrafficBackendAPI.DatabaseModule.Models.UserModule;
 using TrafficBackendAPI.UserModule.Services;
 
 namespace TrafficBackendAPI.UserModule.Commands
@@ -7,6 +7,8 @@ namespace TrafficBackendAPI.UserModule.Commands
     #region Request
     public class UpdateUserCommandRequest : IRequest<UpdateUserCommandResponse>
     {
+        public Guid Id { get; set; }
+
         public required string FirstName { get; set; }
 
         public string? MiddleName { get; set; }
@@ -15,9 +17,9 @@ namespace TrafficBackendAPI.UserModule.Commands
 
         public bool IsAnonymous { get; set; }
 
-        public required Guid CreatedBy { get; set; }
+        public Guid UpdatedBy { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime DateUpdated { get; set; }
 
         public bool IsActive { get; set; }
     }
@@ -47,20 +49,21 @@ namespace TrafficBackendAPI.UserModule.Commands
         #region Method
         public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var updateResult = await _userService.UpdateUser(new UserModel
+            var updateUser = await _userService.UpdateUser(new UserModel
             {
+                Id = request.Id,
                 FirstName = request.FirstName,
                 MiddleName = request.MiddleName,
                 LastName = request.LastName,
                 IsAnonymous = request.IsAnonymous,
-                CreatedBy = request.CreatedBy,
-                DateCreated = request.DateCreated,
+                UpdatedBy = request.UpdatedBy,
+                DateUpdated = request.DateUpdated,
                 IsActive = request.IsActive,
             });
 
             return new UpdateUserCommandResponse
             {
-                Message = updateResult
+                Message = updateUser
             };
         }
         #endregion

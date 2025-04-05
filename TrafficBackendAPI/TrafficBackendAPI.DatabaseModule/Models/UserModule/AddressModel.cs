@@ -1,6 +1,6 @@
-﻿namespace TrafficBackendAPI.UserModule.Models
+﻿namespace TrafficBackendAPI.DatabaseModule.Models.UserModule
 {
-    internal class AddressModel : BaseModel
+    public class AddressModel : BaseModel
     {
         public string? LotNo { get; set; }
 
@@ -18,6 +18,6 @@
 
         public Guid UserId { get; set; }
 
-        public required UserModel User { get; set; }
+        public virtual required UserModel User { get; set; }
     }
 }

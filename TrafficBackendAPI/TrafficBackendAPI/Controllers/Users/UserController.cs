@@ -22,28 +22,33 @@ namespace TrafficBackendAPI.Controllers.Users
 
         #region Methods
         [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody]UserRequestModel userRequestModel)
+        public async Task<IActionResult> AddUser([FromBody]AddUserModel addUserModel)
         {
-            var command = new AddUserCommandRequest
+            if(ModelState.IsValid)
             {
-                FirstName = userRequestModel.FirstName,
-                MiddleName = userRequestModel.MiddleName,
-                LastName = userRequestModel.LastName,
-                IsAnonymous = userRequestModel.IsAnonymous,
-                CreatedBy = userRequestModel.CreatedBy,
-                DateCreated = userRequestModel.DateCreated,
-                IsActive = userRequestModel.IsActive
-            };
+                var command = new AddUserCommandRequest
+                {
+                    FirstName = addUserModel.FirstName,
+                    MiddleName = addUserModel.MiddleName,
+                    LastName = addUserModel.LastName,
+                    IsAnonymous = addUserModel.IsAnonymous,
+                    CreatedBy = addUserModel.CreatedBy
+                };
 
-            var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command);
 
-            if(result is not null)
-            {
-                return CreatedAtAction(nameof(GetUserById), new { id = result.Id }, result);
+                if(result is not null)
+                {
+                    return CreatedAtAction(nameof(GetUserById), new { id = result.Id }, result);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, result);
+                }
             }
             else
             {
-                return BadRequest(result!.Message);
+                return BadRequest(ModelState);
             }
         }
 
@@ -69,11 +74,10 @@ namespace TrafficBackendAPI.Controllers.Users
 
         [HttpGet]
         [Route("/api/Users")]
-        public async Task<IActionResult> GetUsers([FromQuery]List<Guid>? usersId, [FromQuery]bool asNoTracking)
+        public async Task<IActionResult> GetUsers([FromQuery]bool asNoTracking)
         {
             var command = new GetUsersQueryRequest 
             { 
-                Id = usersId!.Count > 0 ? usersId : null,
                 AsNoTracking = asNoTracking,
             };
 
@@ -99,7 +103,7 @@ namespace TrafficBackendAPI.Controllers.Users
 
             var result = await _mediator.Send(command);
 
-            if(result is null)
+            if(string.IsNullOrEmpty(result.Message))
             {
                 return NoContent();
             }
@@ -110,28 +114,36 @@ namespace TrafficBackendAPI.Controllers.Users
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel userRequestModel)
+        public async Task<IActionResult> UpdateUser([FromBody]UpdateUserModel updateUserModel)
         {
-            var command = new UpdateUserCommandRequest()
+            if (ModelState.IsValid)
             {
-                FirstName = userRequestModel.FirstName,
-                MiddleName = userRequestModel.MiddleName,
-                LastName = userRequestModel.LastName,
-                IsAnonymous = userRequestModel.IsAnonymous,
-                CreatedBy = userRequestModel.CreatedBy,
-                DateCreated = userRequestModel.DateCreated,
-                IsActive = userRequestModel.IsActive,
-            };
+                var command = new UpdateUserCommandRequest()
+                {
+                    Id = updateUserModel.Id,
+                    FirstName = updateUserModel.FirstName,
+                    MiddleName = updateUserModel.MiddleName,
+                    LastName = updateUserModel.LastName,
+                    IsAnonymous = updateUserModel.IsAnonymous,
+                    UpdatedBy = updateUserModel.UpdatedBy,
+                    DateUpdated = updateUserModel.DateUpdated,
+                    IsActive = updateUserModel.IsActive,
+                };
 
-            var result = await _mediator.Send(command);
+                var result = await _mediator.Send(command);
 
-            if(result is null)
-            {
-                return NoContent();
+                if(string.IsNullOrEmpty(result.Message))
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound(result);
+                }
             }
             else
             {
-                return BadRequest(result);
+                return BadRequest(ModelState);
             }
         }
         #endregion

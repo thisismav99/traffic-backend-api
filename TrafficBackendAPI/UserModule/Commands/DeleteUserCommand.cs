@@ -34,11 +34,11 @@ namespace TrafficBackendAPI.UserModule.Commands
         #region Method
         public async Task<DeleteUserCommandResponse> Handle(DeleteUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var deleteResult = await _userService.DeleteUser(request.Id);
+            var deleteUser = await _userService.DeleteUser(request.Id);
 
             return new DeleteUserCommandResponse()
             {
-                Message = deleteResult
+                Message = deleteUser
             };
         }
         #endregion

@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TrafficBackendAPI.UserModule.ModelMappings;
+using TrafficBackendAPI.DatabaseModule.ModelMappings.UserModule;
 
-namespace TrafficBackendAPI.UserModule
+namespace TrafficBackendAPI.DatabaseModule
 {
     public class UserDbContext : DbContext
     {
         #region Constructor
-        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
+        public UserDbContext(DbContextOptions<UserDbContext> dbContextOptions) : base(dbContextOptions)
         {
             
         }
@@ -18,6 +18,7 @@ namespace TrafficBackendAPI.UserModule
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserModelMapping());
             modelBuilder.ApplyConfiguration(new AddressModelMapping());
+            modelBuilder.ApplyConfiguration(new ContactModelMapping());
         }
         #endregion
     }

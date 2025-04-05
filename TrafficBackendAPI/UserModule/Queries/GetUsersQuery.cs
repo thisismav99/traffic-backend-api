@@ -6,8 +6,6 @@ namespace TrafficBackendAPI.UserModule.Queries
     #region Request
     public class GetUsersQueryRequest : IRequest<List<GetUsersQueryResponse>>
     {
-        public List<Guid>? Id { get; set; }
-
         public bool AsNoTracking { get; set; }
     }
     #endregion
@@ -29,9 +27,11 @@ namespace TrafficBackendAPI.UserModule.Queries
 
         public DateTime? DateCreated { get; set; } = null;
 
-        public bool? IsActive { get; set; } = null;
+        public Guid? UpdatedBy { get; set; } = Guid.Empty;
 
-        public string? Message { get; set; } = null;
+        public DateTime? DateUpdated { get; set; } = null;
+
+        public bool? IsActive { get; set; } = null;
     }
     #endregion
 
@@ -52,11 +52,12 @@ namespace TrafficBackendAPI.UserModule.Queries
         #region Method
         public async Task<List<GetUsersQueryResponse>> Handle(GetUsersQueryRequest request, CancellationToken cancellationToken)
         {
-            var getUsers = await _userService.GetUsers(request.Id, request.AsNoTracking);
+            var getUsers = await _userService.GetUsers(request.AsNoTracking);
+            var result = new List<GetUsersQueryResponse>();
 
-            if(getUsers.Item1 is not null)
+            if(getUsers is not null)
             {
-                var custom = getUsers.Item1.Select(x => new GetUsersQueryResponse
+                var custom = getUsers.Select(x => new GetUsersQueryResponse
                 {
                     Id = x.Id,
                     FirstName =  x.FirstName,
@@ -65,26 +66,15 @@ namespace TrafficBackendAPI.UserModule.Queries
                     IsAnonymous = x.IsAnonymous,
                     CreatedBy = x.CreatedBy,
                     DateCreated = x.DateCreated,
+                    UpdatedBy = x.UpdatedBy,
+                    DateUpdated = x.DateUpdated,
                     IsActive = x.IsActive,
-                    Message = getUsers.Item2
                 }).ToList();
 
-                var result = new List<GetUsersQueryResponse>();
                 result.AddRange(custom);
-
-                return result;
             }
-            else
-            {
-                var result = new List<GetUsersQueryResponse>();
 
-                result.Select(x => new GetUsersQueryResponse
-                {
-                    Message = getUsers.Item2
-                }).ToList();
-
-                return result;
-            }
+            return result;
         }
         #endregion
     }

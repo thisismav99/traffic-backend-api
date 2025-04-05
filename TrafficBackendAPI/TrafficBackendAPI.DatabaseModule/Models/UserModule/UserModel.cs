@@ -1,6 +1,6 @@
-﻿namespace TrafficBackendAPI.UserModule.Models
+﻿namespace TrafficBackendAPI.DatabaseModule.Models.UserModule
 {
-    internal class UserModel : BaseModel
+    public class UserModel : BaseModel
     {
         public required string FirstName { get; set; }
 

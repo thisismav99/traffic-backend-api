@@ -27,9 +27,11 @@ namespace TrafficBackendAPI.UserModule.Queries
 
         public DateTime? DateCreated { get; set; } = null;
 
-        public bool? IsActive { get; set; } = null;
+        public Guid? UpdatedBy { get; set; } = Guid.Empty;
 
-        public string? Message { get; set; } = null;
+        public DateTime? DateUpdated { get; set; } = null;
+
+        public bool? IsActive { get; set; } = null;
     }
     #endregion
 
@@ -51,33 +53,26 @@ namespace TrafficBackendAPI.UserModule.Queries
         public async Task<GetUserByIdQueryResponse> Handle(GetUserByIdQueryRequest request, CancellationToken cancellationToken)
         {
             var getUser = await _userService.GetUserById(request.Id);
+            var result = new GetUserByIdQueryResponse();
 
-            if (getUser.Item1 is not null)
+            if (getUser is not null)
             {
-                var result = new GetUserByIdQueryResponse
+                result = new GetUserByIdQueryResponse
                 {
-                    Id = getUser.Item1.Id,
-                    FirstName = getUser.Item1.FirstName,
-                    MiddleName = getUser.Item1.MiddleName,
-                    LastName = getUser.Item1.LastName,
-                    IsAnonymous = getUser.Item1.IsAnonymous,
-                    CreatedBy = getUser.Item1.CreatedBy,
-                    DateCreated = getUser.Item1.DateCreated,
-                    IsActive = getUser.Item1.IsActive,
-                    Message = getUser.Item2
+                    Id = getUser.Id,
+                    FirstName = getUser.FirstName,
+                    MiddleName = getUser.MiddleName,
+                    LastName = getUser.LastName,
+                    IsAnonymous = getUser.IsAnonymous,
+                    CreatedBy = getUser.CreatedBy,
+                    DateCreated = getUser.DateCreated,
+                    UpdatedBy = getUser.UpdatedBy,
+                    DateUpdated = getUser.DateUpdated,
+                    IsActive = getUser.IsActive
                 };
-
-                return result;
             }
-            else
-            {
-                var result = new GetUserByIdQueryResponse
-                {
-                    Message = getUser.Item2
-                };
 
-                return result;
-            }
+            return result;
         }
         #endregion
     }

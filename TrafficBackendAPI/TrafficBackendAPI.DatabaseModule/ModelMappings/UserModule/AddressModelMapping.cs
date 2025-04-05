@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TrafficBackendAPI.UserModule.Models;
+using TrafficBackendAPI.DatabaseModule.Models.UserModule;
 
-namespace TrafficBackendAPI.UserModule.ModelMappings
+namespace TrafficBackendAPI.DatabaseModule.ModelMappings.UserModule
 {
     internal class AddressModelMapping : IEntityTypeConfiguration<AddressModel>
     {
@@ -20,6 +20,8 @@ namespace TrafficBackendAPI.UserModule.ModelMappings
             builder.Property(x => x.UserId).IsRequired();
             builder.Property(x => x.CreatedBy).IsRequired();
             builder.Property(x => x.DateCreated).IsRequired();
+            builder.Property(x => x.UpdatedBy);
+            builder.Property(x => x.DateUpdated);
             builder.Property(x => x.IsActive).IsRequired();
 
             builder.HasOne(x => x.User)

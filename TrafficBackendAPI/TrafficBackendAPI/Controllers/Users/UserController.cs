@@ -93,6 +93,35 @@ namespace TrafficBackendAPI.Controllers.Users
             }
         }
 
+        [HttpPost]
+        [Route("/api/UsersById")]
+        public async Task<IActionResult> GetUsersById([FromBody]GetUsersByIdModel getUsersByIdModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var command = new GetUsersByIdQueryRequest
+                {
+                    UsersId = getUsersByIdModel.UsersId,
+                    AsNoTracking = getUsersByIdModel.AsNoTracking
+                };
+
+                var result = await _mediator.Send(command);
+
+                if(result.Count > 0)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {

@@ -27,7 +27,14 @@ namespace TrafficBackendAPI.UserModule.Services
 
                 var data = await _genericRepository.Add(user);
 
-                return data.Id;
+                if(data is not null)
+                {
+                    return data.Id;
+                }
+                else
+                {
+                    throw new ArgumentNullException("Data has not been saved.");
+                }
             }
             catch
             {
@@ -70,7 +77,7 @@ namespace TrafficBackendAPI.UserModule.Services
                 }
                 else
                 {
-                    throw new ArgumentException("No data found.");
+                    throw new ArgumentNullException("No data found.");
                 }
             }
             catch
@@ -91,7 +98,7 @@ namespace TrafficBackendAPI.UserModule.Services
                 }
                 else
                 {
-                    throw new ArgumentException("No data found.");
+                    throw new ArgumentNullException("No data found.");
                 }
             }
             catch
@@ -112,7 +119,7 @@ namespace TrafficBackendAPI.UserModule.Services
                 }
                 else 
                 {
-                    throw new ArgumentException("No data found.");
+                    throw new ArgumentNullException("No data found.");
                 }
             }
             catch

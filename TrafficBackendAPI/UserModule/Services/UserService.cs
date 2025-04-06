@@ -1,6 +1,5 @@
-﻿using TrafficBackendAPI.DatabaseModule;
-using TrafficBackendAPI.DatabaseModule.Models.UserModule;
-using TrafficBackendAPI.DatabaseModule.Repositories;
+﻿using TrafficBackendAPI.UserModule.Model;
+using TrafficBackendAPI.UserModule.Repositories;
 
 namespace TrafficBackendAPI.UserModule.Services
 {

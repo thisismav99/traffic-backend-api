@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TrafficBackendAPI.DatabaseModule.Models.UserModule;
+using TrafficBackendAPI.UserModule.Model;
 using TrafficBackendAPI.UserModule.Services;
 
 namespace TrafficBackendAPI.UserModule.Commands

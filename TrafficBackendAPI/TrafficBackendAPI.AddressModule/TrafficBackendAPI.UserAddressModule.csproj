@@ -17,9 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="UserDbContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-    </None>
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

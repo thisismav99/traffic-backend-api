@@ -1,4 +1,4 @@
-﻿using TrafficBackendAPI.DatabaseModule.Models.UserModule;
+﻿using TrafficBackendAPI.UserModule.Model;
 
 namespace TrafficBackendAPI.UserModule.Services
 {

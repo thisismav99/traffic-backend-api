@@ -1,4 +1,3 @@
-using TrafficBackendAPI.DatabaseModule;
 using TrafficBackendAPI.ReportModule;
 using TrafficBackendAPI.UserModule;
 
@@ -16,14 +15,8 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<Progra
 #endregion
 
 #region Modules
-var connectionStrings = new List<string>()
-{
-    builder.Configuration.GetConnectionString("UserDB")!
-};
-
-builder.Services.RegisterDatabaseModule(connectionStrings);
 builder.Services.RegisterReportModule(builder.Configuration.GetConnectionString("ReportDB")!);
-builder.Services.RegisterUserModule();
+builder.Services.RegisterUserModule(builder.Configuration.GetConnectionString("UserDB")!);
 #endregion
 
 var app = builder.Build();
